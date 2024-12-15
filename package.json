@@ -1,0 +1,31 @@
+{
+  "name": "recipe_gen",
+  "version": "0.1.0",
+  "private": true,
+"dependencies": {
+    "axios": "^1.7.7",
+    "next": "14.2.13",
+    "react": "^18",
+    "react-dom": "^18"
+  },
+  "devDependencies": {
+    "@types/node": "^20",
+    "@types/react": "^18",
+    "@types/react-dom": "^18",
+    "concurrently": "^9.1.0",
+    "eslint": "^8",
+    "eslint-config-next": "14.2.13",
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
+  },
+  "scripts": {
+   "build": "next build",
+    "start": "next start",
+    "lint": "next lint",
+    "dev": "next dev",
+    "check": "tsc --noEmit"
+  }
+  
+  
+}
