@@ -54,7 +54,7 @@ const RecipeGenerator: React.FC = () => {
     };
 
     try {
-      const response = await axios.post<RecipeResponse>('http://127.0.0.1:5000/generate_recipe', recipeRequest);
+      const response = await axios.post<RecipeResponse>('https://instameals.onrender.com/generate_recipe', recipeRequest);
       setRecipe(response.data.recipe);
       setChatMessage(response.data.chat_message);
     } catch (err) {
