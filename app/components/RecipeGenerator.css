@@ -1,0 +1,87 @@
+/* Basic container setup */
+.container {
+    width: 100%;
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 20px;
+    font-family: 'Arial', sans-serif;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Title Styling */
+  .title {
+    text-align: center;
+    color: #333;
+    font-size: 32px;
+    margin-bottom: 30px;
+  }
+  
+  /* Form styling */
+  .form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+  }
+  
+  /* Input group for labels and fields */
+  .input-group {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* Styling for input fields */
+  input[type="text"], input[type="number"], select {
+    padding: 10px;
+    margin-top: 5px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+  }
+  
+  /* Button styling */
+  .submit-btn {
+    padding: 12px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+  
+  .submit-btn:hover {
+    background-color: #45a049;
+  }
+  
+  .submit-btn:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+  
+  /* Error message styling */
+  .error-message {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    margin-top: 15px;
+  }
+  
+  /* Chat message and recipe result styling */
+  .chat-message, .recipe {
+    margin-top: 30px;
+    background-color: #eef2f3;
+    padding: 20px;
+    border-radius: 5px;
+  }
+  
+  .recipe pre {
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 5px;
+    white-space: pre-wrap;
+    word-wrap: break-word;
+  }
+  
