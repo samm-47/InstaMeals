@@ -55,7 +55,9 @@ const RecipeGenerator: React.FC = () => {
 
     try {
       const response = await axios.post<RecipeResponse>('https://instameals.onrender.com/generate_recipe', recipeRequest);
-      setRecipe(response.data.recipe);
+      const formattedRecipe = response.data.recipe.replace(/^\* /gm, '• ');
+
+      setRecipe(formattedRecipe);
       setChatMessage(response.data.chat_message);
     } catch (err) {
       console.error('Error generating recipe:', err);
@@ -102,7 +104,7 @@ const RecipeGenerator: React.FC = () => {
   
       {recipe && (
         <div className="recipe">
-          <h2>Generated Recipe:</h2>
+          <h2>Recipe</h2>
           <pre>{recipe}</pre>
         </div>
       )}
