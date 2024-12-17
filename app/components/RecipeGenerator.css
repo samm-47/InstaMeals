@@ -12,8 +12,9 @@
   flex: 0 0 60%; /* Fixed width of 40% */ /* 60-70% of the page width */
   padding: 15px;
   background-color: #fff;
+  border: 1px solid #ddd;
   border-radius: 8px;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
 
 .title {
@@ -49,14 +50,15 @@ input, select {
   padding: 10px;
   font-size: 14px; /* Smaller button font size */
   color: white;
-  background-color: #4CAF50;
-  border: none;
-  border-radius: 5px;
+  background-color: #68a3b7;
+  border: 2px solid #4589a0;
+  border-radius: 10px;
+  
   cursor: pointer;
 }
 
 .submit-btn:hover, .save-btn:hover {
-  background-color: #45a049;
+  background-color: #96c4de;
 }
 
 .submit-btn:disabled {
@@ -68,16 +70,17 @@ input, select {
 .recipe {
   margin-top: 15px;
   padding: 10px;
-  background-color: #eef2f3;
-  border-radius: 5px;
-  max-width: 100%;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background-color: #fff;
+  
+  max-width: 80%;
+  
 }
 
 .recipe pre {
   background-color: #fff;
+  
   padding: 8px; /* Reduce padding */
-  border-radius: 5px;
+  
   font-size: 14px;
   white-space: pre-wrap; /* Wrap text while preserving pre-formatting */
   word-break: break-word; /* Break words to prevent overflow */
@@ -86,12 +89,13 @@ input, select {
 }
 .saved-recipes pre {
   background-color: #fff;
+  border: 1px solid #7393B3;
   padding: 8px; /* Reduce padding */
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 8px;
   white-space: pre-wrap; /* Wrap text while preserving pre-formatting */
   word-break: break-word; /* Break words to prevent overflow */
-  max-width: 90%;
+  max-width: 80%;
   overflow: auto; /* Allow scrolling if still needed */
 }
 
@@ -99,7 +103,7 @@ input, select {
 
 .saved-recipes {
   flex: 0 0 40%; /* Fixed width of 40% */
-  max-width: 600px;
+  max-width: 380px;
   padding: 8px;
   background-color: #fff;
   border: 1px solid #ddd;
@@ -124,11 +128,13 @@ input, select {
   display: flex;
   flex-direction: column;
   gap: 10px;
+  
 }
 
 /* Individual saved recipe list item */
 .saved-recipes li {
   background-color: #f9f9f9;
+  
   padding: 10px;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
@@ -143,6 +149,7 @@ input, select {
 /* Hover effect for list items */
 .saved-recipes li:hover {
   background-color: #f1f1f1;
+  
 }
 /* Modal overlay */
 .modal-overlay {
@@ -152,6 +159,7 @@ input, select {
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.7);
+  
   display: flex;
   justify-content: center;
   align-items: center;
@@ -160,6 +168,7 @@ input, select {
 
 .modal-content pre{
   background-color: #fff;
+  
   padding: 8px; /* Reduce padding */
   border-radius: 5px;
   font-size: 14px;
@@ -172,6 +181,7 @@ input, select {
 /* Modal content */
 .modal-content {
   background: white;
+  
   padding: 20px;
   border-radius: 8px;
   width: 80%;
@@ -183,7 +193,7 @@ input, select {
 
 /* Close button */
 .close-btn {
-  background-color: #f44336;
+  background-color: #7393B3;
   color: white;
   border: none;
   padding: 10px;
@@ -193,7 +203,7 @@ input, select {
 }
 
 .close-btn:hover {
-  background-color: #d32f2f;
+  background-color: #455f78;
 }
 
 
@@ -225,5 +235,5 @@ input, select {
 }
 
 .saved-recipe-item button.delete-btn:hover {
-  color: red; /* Change color on hover */
+  color: #7393B3; /* Change color on hover */
 }
