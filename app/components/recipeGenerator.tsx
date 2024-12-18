@@ -90,7 +90,10 @@ const RecipeGenerator: React.FC = () => {
 
   const handleSaveRecipe = () => {
     if (recipe && !savedRecipes.includes(recipe)) {
-      setSavedRecipes((prevRecipes) => [...prevRecipes, recipe]);
+      const updatedSavedRecipes = [...savedRecipes, recipe];
+      setSavedRecipes(updatedSavedRecipes);
+      // Update localStorage as well
+      localStorage.setItem('savedRecipes', JSON.stringify(updatedSavedRecipes));
     }
   };
 
@@ -110,6 +113,8 @@ const RecipeGenerator: React.FC = () => {
   const handleDeleteRecipe = (index: number) => {
     const updatedRecipes = savedRecipes.filter((_, i) => i !== index);
     setSavedRecipes(updatedRecipes);
+    // Update localStorage to reflect the deletion
+    localStorage.setItem('savedRecipes', JSON.stringify(updatedRecipes));
   };
 
   return (
@@ -185,23 +190,25 @@ const RecipeGenerator: React.FC = () => {
           )}
         </div>
 
-        {/* Saved Recipes Section */}
-        <div className="saved-recipes">
-          <h2>Saved Recipes</h2>
-          <ul>
-            {savedRecipes.map((savedRecipe, index) => (
-              <li key={index} className="saved-recipe-item">
-                <pre onClick={() => openModal(savedRecipe)}>{savedRecipe}</pre>
-                <button 
-                  className="delete-btn" 
-                  onClick={() => handleDeleteRecipe(index)} 
-                  title="Delete Recipe">
-                  🗑️
-                </button>
-              </li>
-            ))}
-          </ul>
-        </div>
+        {/* Conditionally render saved recipes section */}
+       
+          <div className="saved-recipes">
+            <h2>Saved Recipes</h2>
+            <ul>
+              {savedRecipes.map((savedRecipe, index) => (
+                <li key={index} className="saved-recipe-item">
+                  <pre onClick={() => openModal(savedRecipe)}>{savedRecipe}</pre>
+                  <button 
+                    className="delete-btn" 
+                    onClick={() => handleDeleteRecipe(index)} 
+                    title="Delete Recipe">
+                    🗑️
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        
       </div>
 
       {/* Modal */}
