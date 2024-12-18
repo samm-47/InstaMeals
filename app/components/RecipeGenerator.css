@@ -10,18 +10,19 @@
 /* Recipe Generator Section */
 .recipe-generator {
   flex: 0 0 60%; /* Fixed width of 40% */ /* 60-70% of the page width */
-  padding: 15px;
+  padding: 10px;
   background-color: #fff;
   border: 1px solid #ddd;
   border-radius: 8px;
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+ 
 }
 
 .title {
   text-align: center;
   color: #333;
-  font-size: 26px; /* Slightly smaller */
-  margin-bottom: 15px;
+  font-size: 24px; /* Slightly smaller */
+  margin-bottom: 10px;
 }
 
 .form {
@@ -38,7 +39,7 @@
 }
 
 input, select {
-  padding: 8px; /* Padding for inputs */
+  padding: 6px; /* Padding for inputs */
   font-size: 14px; /* Font size */
   border: 1px solid #ddd;
   border-radius: 5px;
@@ -47,7 +48,7 @@ input, select {
 }
 
 .submit-btn, .save-btn {
-  padding: 10px;
+  padding: 6px;
   font-size: 14px; /* Smaller button font size */
   color: white;
   background-color: #68a3b7;
@@ -84,7 +85,7 @@ input, select {
   font-size: 14px;
   white-space: pre-wrap; /* Wrap text while preserving pre-formatting */
   word-break: break-word; /* Break words to prevent overflow */
-  max-width: 100%;
+  max-width: 120%;
   overflow: auto; /* Allow scrolling if still needed */
 }
 .saved-recipes pre {
@@ -99,18 +100,18 @@ input, select {
   overflow: auto; /* Allow scrolling if still needed */
 }
 
-/* Saved Recipes Section */
 
+/* Saved Recipes Section */
 .saved-recipes {
   flex: 0 0 40%; /* Fixed width of 40% */
   max-width: 380px;
+  min-height: 100vh; /* Ensure it takes the full height of the page */
   padding: 8px;
   background-color: #fff;
-  border: 1px solid #ddd;
-  border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  display: block;
+  display: flex;
   flex-direction: column;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Optional: add shadow if you want a border effect */
+  border: 1px solid #ddd; /* Optional: border to make it distinct */
 }
 
 /* Saved Recipes Title */
@@ -128,22 +129,19 @@ input, select {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  
 }
 
 /* Individual saved recipe list item */
 .saved-recipes li {
   background-color: #f9f9f9;
-  
   padding: 10px;
   border-radius: 4px;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
   font-size: 14px;
-  
   white-space: pre-wrap; /* Wrap text while preserving pre-formatting */
   word-break: break-word; /* Break words to prevent overflow */
   max-width: 95%;
-  overflow: hidden; /* Allow scrolling if still needed */
+  overflow: hidden; /* Prevent overflow of content */
 }
 
 /* Hover effect for list items */
