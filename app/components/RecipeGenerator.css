@@ -51,15 +51,15 @@ input, select {
   padding: 6px;
   font-size: 14px; /* Smaller button font size */
   color: white;
-  background-color: #68a3b7;
-  border: 2px solid #4589a0;
+  background-color: #455f78;
+  border: 2px solid #7393B3;
   border-radius: 10px;
   
   cursor: pointer;
 }
 
 .submit-btn:hover, .save-btn:hover {
-  background-color: #96c4de;
+  background-color: #7393B3;
 }
 
 .submit-btn:disabled {
@@ -234,4 +234,58 @@ input, select {
 
 .saved-recipe-item button.delete-btn:hover {
   color: #7393B3; /* Change color on hover */
+}
+.email-section {
+  background-color: #f9f9f9; /* Light background for contrast */
+  padding: 20px;            /* Spacing inside the section */
+  border: 1px solid #ddd;   /* Subtle border */
+  border-radius: 8px;       /* Rounded corners */
+  max-width: 380px;        /* Limit width for readability */
+  margin: 0;        /* Center align and add space */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Soft shadow */
+}
+
+.email-section h3 {
+  margin-bottom: 10px;  /* Add space below the heading */
+  font-size: 16px;    /* Slightly larger heading */
+  color: #333;          /* Darker color for text */
+  text-align: center;   /* Center align the heading */
+}
+
+.email-section input {
+  width: 100%; /* Full width with padding adjustment */
+  padding: 10px;           /* Space inside the input */
+  margin-bottom: 10px;     /* Space below the input */
+  border: 1px solid #ccc;  /* Subtle border */
+  border-radius: 4px;      /* Rounded corners */
+  font-size: 14px;         /* Readable text size */
+}
+
+.email-section input:focus {
+  border-color: #007bff;  /* Highlight border on focus */
+  outline: none;          /* Remove default outline */
+  box-shadow: 0 0 5px rgba(0, 123, 255, 0.5); /* Add shadow effect */
+}
+
+.email-section button {
+  width: 100%;               /* Full width for consistency */
+  padding: 10px;             /* Space inside the button */
+  background-color: #455f78; /* Primary color */
+  color: white;              /* White text */
+  border: 2px solid #7393B3;             /* Remove border */
+  border-radius: 10px;        /* Rounded corners */
+  font-size: 14px;           /* Readable text size */
+  cursor: pointer;           /* Pointer cursor for interactivity */
+  transition: background-color 0.3s ease; /* Smooth hover transition */
+}
+
+.email-section button:hover {
+  background-color: #7393B3; /* Darker shade on hover */
+}
+
+.email-section p {
+  margin-top: 10px;   /* Space above the success message */
+  color: green;       /* Green for success */
+  font-size: 14px;    /* Match input and button text size */
+  text-align: center; /* Center align text */
 }
