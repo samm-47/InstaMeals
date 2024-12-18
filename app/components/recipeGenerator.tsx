@@ -77,7 +77,7 @@ const RecipeGenerator: React.FC = () => {
 
   const sendRecipesToEmail = async () => {
     try {
-      const response = await axios.post('http://127.0.0.1:5000/send_recipes', {
+      const response = await axios.post('https://instameals.onrender.com/send_recipes', {
         email,
         recipes: savedRecipes,
       });
@@ -113,7 +113,7 @@ const RecipeGenerator: React.FC = () => {
     };
 
     try {
-      const response = await axios.post<RecipeResponse>('http://127.0.0.1:5000/generate_recipe', recipeRequest);
+      const response = await axios.post<RecipeResponse>('https://instameals.onrender.com/generate_recipe', recipeRequest);
       setRecipe(response.data.recipe);
     } catch (err) {
       console.error('Error generating recipe:', err);
