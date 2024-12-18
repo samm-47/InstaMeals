@@ -4,3 +4,4 @@ google-generativeai
 langdetect
 python-dotenv
 gunicorn
+flask-mail
