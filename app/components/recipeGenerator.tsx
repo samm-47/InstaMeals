@@ -1,4 +1,4 @@
-'use client';
+'use client'
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import './RecipeGenerator.css';
@@ -6,9 +6,10 @@ import './RecipeGenerator.css';
 interface RecipeRequest {
   cuisine: string;
   dietary: string;
-  ingredients: string[];
+  leftover_ingredients: string[];
   time_limit: number;
   difficulty: string;
+  additional_notes: string;
 }
 
 interface RecipeResponse {
@@ -19,9 +20,10 @@ interface RecipeResponse {
 const RecipeGenerator: React.FC = () => {
   const [cuisine, setCuisine] = useState<string>('');
   const [dietary, setDietary] = useState<string>('');
-  const [ingredients, setIngredients] = useState<string>('');
+  const [leftoverIngredients, setLeftoverIngredients] = useState<string>('');
   const [timeLimit, setTimeLimit] = useState<number>(30);
   const [difficulty, setDifficulty] = useState<string>('easy');
+  const [additionalNotes, setAdditionalNotes] = useState<string>('');
   const [recipe, setRecipe] = useState<string>('');
   const [savedRecipes, setSavedRecipes] = useState<string[]>([]);
   const [selectedRecipes, setSelectedRecipes] = useState<Set<number>>(new Set()); // Track selected recipes for deletion
@@ -56,9 +58,10 @@ const RecipeGenerator: React.FC = () => {
     const { name, value } = e.target;
     if (name === 'cuisine') setCuisine(value);
     else if (name === 'dietary') setDietary(value);
-    else if (name === 'ingredients') setIngredients(value);
+    else if (name === 'leftoverIngredients') setLeftoverIngredients(value);
     else if (name === 'timeLimit') setTimeLimit(Number(value));
     else if (name === 'difficulty') setDifficulty(value);
+    else if (name === 'additionalNotes') setAdditionalNotes(value);
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -67,14 +70,15 @@ const RecipeGenerator: React.FC = () => {
     setError('');
     setRecipe('');
 
-    const ingredientsArray = ingredients.split(',').map((ingredient) => ingredient.trim());
+    const leftoverIngredientsArray = leftoverIngredients.split(',').map((ingredient) => ingredient.trim());
 
     const recipeRequest: RecipeRequest = {
       cuisine,
       dietary,
-      ingredients: ingredientsArray,
+      leftover_ingredients: leftoverIngredientsArray,
       time_limit: timeLimit,
       difficulty,
+      additional_notes: additionalNotes,
     };
 
     try {
@@ -145,11 +149,11 @@ const RecipeGenerator: React.FC = () => {
               />
             </div>
             <div className="input-group">
-              <label>Ingredients (comma-separated):</label>
+              <label>Leftover Ingredients (comma-separated):</label>
               <input
                 type="text"
-                name="ingredients"
-                value={ingredients}
+                name="leftoverIngredients"
+                value={leftoverIngredients}
                 onChange={handleInputChange}
                 placeholder="e.g., tomato, mozzarella"
               />
@@ -171,6 +175,16 @@ const RecipeGenerator: React.FC = () => {
                 <option value="medium">Medium</option>
                 <option value="hard">Hard</option>
               </select>
+            </div>
+            <div className="input-group">
+              <label>Additional Notes:</label>
+              <input
+                type="text"
+                name="additionalNotes"
+                value={additionalNotes}
+                onChange={handleInputChange}
+                placeholder="e.g., No spicy food, add extra cheese"
+              />
             </div>
             <button type="submit" disabled={loading} className="submit-btn">
               {loading ? 'Generating...' : 'Generate Recipe'}
@@ -210,6 +224,7 @@ const RecipeGenerator: React.FC = () => {
           </div>
         
       </div>
+
 
       {/* Modal */}
       {isModalOpen && (
