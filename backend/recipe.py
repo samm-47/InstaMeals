@@ -23,15 +23,17 @@ def generate_recipe():
     data = request.json
     cuisine = data.get('cuisine', 'any')
     dietary = data.get('dietary', 'none')
-    ingredients = data.get('ingredients', [])  # List of included ingredients
     time_limit = data.get('time_limit', 30)  # Default: 30 minutes
     difficulty = data.get('difficulty', 'easy')
+    leftover_ingredients = data.get('leftover_ingredients', [])  # Update key name
+    additional_notes = data.get('additional_notes', 'none')     # Update key name
+
 
     # Build the prompt for the AI model
     prompt = f"""
     Generate a clear and simple recipe for a {cuisine} dish that meets these dietary restrictions: {dietary}.
-    Use the following ingredients: {', '.join(ingredients)}. The cooking time should be under {time_limit} minutes.
-    Ensure the recipe is suitable for a {difficulty} level cook. Provide a simple, step-by-step recipe with clear ingredient measurements and concise instructions.
+    Use the following leftover ingredients: {', '.join(leftover_ingredients)}. The cooking time should be under {time_limit} minutes.
+    Ensure the recipe is suitable for a {difficulty} level cook. Please take into account {additional_notes}. Provide a simple, step-by-step recipe with clear ingredient measurements and concise instructions.
     Avoid excessive explanations or fancy formatting like markdown.
     """
 
