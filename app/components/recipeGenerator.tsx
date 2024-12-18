@@ -1,4 +1,5 @@
-'use client'
+
+'use client';
 import React, { useState, useEffect, ChangeEvent, FormEvent } from 'react';
 import axios from 'axios';
 import './RecipeGenerator.css';
@@ -13,26 +14,25 @@ interface RecipeRequest {
 }
 
 interface RecipeResponse {
-  chat_message: string;
   recipe: string;
 }
 
 const RecipeGenerator: React.FC = () => {
-  const [cuisine, setCuisine] = useState<string>('');
-  const [dietary, setDietary] = useState<string>('');
-  const [leftoverIngredients, setLeftoverIngredients] = useState<string>('');
-  const [timeLimit, setTimeLimit] = useState<number>(30);
-  const [difficulty, setDifficulty] = useState<string>('easy');
-  const [additionalNotes, setAdditionalNotes] = useState<string>('');
-  const [recipe, setRecipe] = useState<string>('');
+  const [cuisine, setCuisine] = useState('');
+  const [dietary, setDietary] = useState('');
+  const [leftoverIngredients, setLeftoverIngredients] = useState('');
+  const [timeLimit, setTimeLimit] = useState(30);
+  const [difficulty, setDifficulty] = useState('easy');
+  const [additionalNotes, setAdditionalNotes] = useState('');
+  const [recipe, setRecipe] = useState('');
   const [savedRecipes, setSavedRecipes] = useState<string[]>([]);
-  const [selectedRecipes, setSelectedRecipes] = useState<Set<number>>(new Set()); // Track selected recipes for deletion
-  const [loading, setLoading] = useState<boolean>(false);
-  const [error, setError] = useState<string>('');
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false); // Modal state
-  const [modalRecipe, setModalRecipe] = useState<string>(''); // Recipe to show in modal
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalRecipe, setModalRecipe] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState('');
+  const [email, setEmail] = useState('');
+  const [emailSent, setEmailSent] = useState(false);
 
-  // Load saved recipes from localStorage on component mount
   useEffect(() => {
     const storedRecipes = localStorage.getItem('savedRecipes');
     if (storedRecipes) {
@@ -41,27 +41,56 @@ const RecipeGenerator: React.FC = () => {
         if (Array.isArray(parsedRecipes)) {
           setSavedRecipes(parsedRecipes);
         }
-      } catch (error) {
-        console.error('Error loading recipes from localStorage:', error);
+      } catch (err) {
+        console.error('Error loading recipes from localStorage:', err);
       }
     }
   }, []);
 
-  // Save recipes to localStorage whenever savedRecipes state changes
-  useEffect(() => {
-    if (savedRecipes.length > 0) {
-      localStorage.setItem('savedRecipes', JSON.stringify(savedRecipes));
-    }
-  }, [savedRecipes]);
-
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    if (name === 'cuisine') setCuisine(value);
-    else if (name === 'dietary') setDietary(value);
-    else if (name === 'leftoverIngredients') setLeftoverIngredients(value);
-    else if (name === 'timeLimit') setTimeLimit(Number(value));
-    else if (name === 'difficulty') setDifficulty(value);
-    else if (name === 'additionalNotes') setAdditionalNotes(value);
+    switch (name) {
+      case 'cuisine':
+        setCuisine(value);
+        break;
+      case 'dietary':
+        setDietary(value);
+        break;
+      case 'leftoverIngredients':
+        setLeftoverIngredients(value);
+        break;
+      case 'timeLimit':
+        setTimeLimit(Number(value));
+        break;
+      case 'difficulty':
+        setDifficulty(value);
+        break;
+      case 'additionalNotes':
+        setAdditionalNotes(value);
+        break;
+    }
+  };
+
+  const handleEmailChange = (e: ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
+
+  const sendRecipesToEmail = async () => {
+    try {
+      const response = await axios.post('http://127.0.0.1:5000/send_recipes', {
+        email,
+        recipes: savedRecipes,
+      });
+      if (response.status === 200) {
+        setEmailSent(true);
+        alert('Recipes sent successfully!');
+      } else {
+        alert('Failed to send recipes. Please try again.');
+      }
+    } catch (err) {
+      console.error('Error sending recipes:', err);
+      alert('An error occurred while sending recipes. Please try again.');
+    }
   };
 
   const handleSubmit = async (e: FormEvent) => {
@@ -70,7 +99,9 @@ const RecipeGenerator: React.FC = () => {
     setError('');
     setRecipe('');
 
-    const leftoverIngredientsArray = leftoverIngredients.split(',').map((ingredient) => ingredient.trim());
+    const leftoverIngredientsArray = leftoverIngredients
+      .split(',')
+      .map((ingredient) => ingredient.trim());
 
     const recipeRequest: RecipeRequest = {
       cuisine,
@@ -96,28 +127,23 @@ const RecipeGenerator: React.FC = () => {
     if (recipe && !savedRecipes.includes(recipe)) {
       const updatedSavedRecipes = [...savedRecipes, recipe];
       setSavedRecipes(updatedSavedRecipes);
-      // Update localStorage as well
       localStorage.setItem('savedRecipes', JSON.stringify(updatedSavedRecipes));
     }
   };
 
-  // Open modal with the clicked recipe
   const openModal = (recipe: string) => {
     setModalRecipe(recipe);
     setIsModalOpen(true);
   };
 
-  // Close the modal
   const closeModal = () => {
     setIsModalOpen(false);
     setModalRecipe('');
   };
 
-  // Handle deletion of a recipe
   const handleDeleteRecipe = (index: number) => {
     const updatedRecipes = savedRecipes.filter((_, i) => i !== index);
     setSavedRecipes(updatedRecipes);
-    // Update localStorage to reflect the deletion
     localStorage.setItem('savedRecipes', JSON.stringify(updatedRecipes));
   };
 
@@ -128,63 +154,31 @@ const RecipeGenerator: React.FC = () => {
         <div className="recipe-generator">
           <h1 className="title">Welcome to InstaMeals</h1>
           <form onSubmit={handleSubmit} className="form">
-            <div className="input-group">
-              <label>Cuisine:</label>
-              <input
-                type="text"
-                name="cuisine"
-                value={cuisine}
-                onChange={handleInputChange}
-                placeholder="e.g., Italian, Indian"
-              />
-            </div>
-            <div className="input-group">
-              <label>Dietary Restrictions:</label>
-              <input
-                type="text"
-                name="dietary"
-                value={dietary}
-                onChange={handleInputChange}
-                placeholder="e.g., Vegetarian, Gluten-free"
-              />
-            </div>
-            <div className="input-group">
-              <label>Leftover Ingredients (comma-separated):</label>
-              <input
-                type="text"
-                name="leftoverIngredients"
-                value={leftoverIngredients}
-                onChange={handleInputChange}
-                placeholder="e.g., tomato, mozzarella"
-              />
-            </div>
+            {[
+              { label: 'Cuisine', name: 'cuisine', value: cuisine, placeholder: 'e.g., Italian, Indian' },
+              { label: 'Dietary Restrictions', name: 'dietary', value: dietary, placeholder: 'e.g., Vegetarian, Gluten-free' },
+              { label: 'Leftover Ingredients (comma-separated)', name: 'leftoverIngredients', value: leftoverIngredients, placeholder: 'e.g., tomato, mozzarella' },
+              { label: 'Additional Notes', name: 'additionalNotes', value: additionalNotes, placeholder: 'e.g., No spicy food, add extra cheese' },
+            ].map((field, index) => (
+              <div className="input-group" key={index}>
+                <label>{field.label}:</label>
+                <input type="text" name={field.name} value={field.value} onChange={handleInputChange} placeholder={field.placeholder} />
+              </div>
+            ))}
+
             <div className="input-group">
               <label>Time Limit (minutes):</label>
-              <input
-                type="number"
-                name="timeLimit"
-                value={timeLimit}
-                onChange={handleInputChange}
-                placeholder="e.g., 30"
-              />
+              <input type="number" name="timeLimit" value={timeLimit} onChange={handleInputChange} placeholder="e.g., 30" />
             </div>
             <div className="input-group">
               <label>Difficulty:</label>
               <select name="difficulty" value={difficulty} onChange={handleInputChange}>
-                <option value="easy">Easy</option>
-                <option value="medium">Medium</option>
-                <option value="hard">Hard</option>
+                {['easy', 'medium', 'hard'].map((level) => (
+                  <option key={level} value={level}>
+                    {level.charAt(0).toUpperCase() + level.slice(1)}
+                  </option>
+                ))}
               </select>
-            </div>
-            <div className="input-group">
-              <label>Additional Notes:</label>
-              <input
-                type="text"
-                name="additionalNotes"
-                value={additionalNotes}
-                onChange={handleInputChange}
-                placeholder="e.g., No spicy food, add extra cheese"
-              />
             </div>
             <button type="submit" disabled={loading} className="submit-btn">
               {loading ? 'Generating...' : 'Generate Recipe'}
@@ -204,31 +198,36 @@ const RecipeGenerator: React.FC = () => {
           )}
         </div>
 
-        {/* Conditionally render saved recipes section */}
-       
-          <div className="saved-recipes">
-            <h2>Saved Recipes</h2>
-            <ul>
-              {savedRecipes.map((savedRecipe, index) => (
-                <li key={index} className="saved-recipe-item">
-                  <pre onClick={() => openModal(savedRecipe)}>{savedRecipe}</pre>
-                  <button 
-                    className="delete-btn" 
-                    onClick={() => handleDeleteRecipe(index)} 
-                    title="Delete Recipe">
-                    🗑️
-                  </button>
-                </li>
-              ))}
-            </ul>
-          </div>
-        
+        {/* Saved Recipes Section */}
+        <div className="saved-recipes">
+          <h2>Saved Recipes</h2>
+          <ul>
+            {savedRecipes.map((savedRecipe, index) => (
+              <li key={index} className="saved-recipe-item">
+                <pre onClick={() => openModal(savedRecipe)}>{savedRecipe}</pre>
+                <button className="delete-btn" onClick={() => handleDeleteRecipe(index)} aria-label="Delete Recipe">
+                  🗑️
+                </button>
+              </li>
+            ))}
+          </ul>
+          <div className="email-section">
+          <h3>Send Saved Recipes to Your Email</h3>
+          <input
+            type="email"
+            placeholder="Enter your email"
+            value={email}
+            onChange={handleEmailChange}
+          />
+          <button onClick={sendRecipesToEmail}>Send Recipes</button>
+          {emailSent && <p>Email sent successfully!</p>}
+        </div>
+        </div>
       </div>
-
 
       {/* Modal */}
       {isModalOpen && (
-        <div className="modal-overlay" onClick={closeModal}>
+        <div className="modal-overlay" onClick={closeModal} aria-label="Close Recipe Modal">
           <div className="modal-content" onClick={(e) => e.stopPropagation()}>
             <h2>Saved Recipe</h2>
             <pre>{modalRecipe}</pre>
