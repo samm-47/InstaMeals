@@ -25,7 +25,7 @@ const RecipeGenerator: React.FC = () => {
   const [difficulty, setDifficulty] = useState('easy');
   const [additionalNotes, setAdditionalNotes] = useState('');
   const [recipe, setRecipe] = useState('');
-  const [savedRecipes, setSavedRecipes] = useState<string[]>([]);
+  
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalRecipe, setModalRecipe] = useState('');
   const [loading, setLoading] = useState(false);
@@ -33,19 +33,27 @@ const RecipeGenerator: React.FC = () => {
   const [email, setEmail] = useState('');
   const [emailSent, setEmailSent] = useState(false);
 
-  useEffect(() => {
-    const storedRecipes = localStorage.getItem('savedRecipes');
-    if (storedRecipes) {
-      try {
-        const parsedRecipes = JSON.parse(storedRecipes);
-        if (Array.isArray(parsedRecipes)) {
-          setSavedRecipes(parsedRecipes);
-        }
-      } catch (err) {
-        console.error('Error loading recipes from localStorage:', err);
+  const [savedRecipes, setSavedRecipes] = useState<string[] | null>(null);
+
+useEffect(() => {
+  const storedRecipes = localStorage.getItem('savedRecipes');
+  if (storedRecipes) {
+    try {
+      const parsedRecipes = JSON.parse(storedRecipes);
+      if (Array.isArray(parsedRecipes)) {
+        setSavedRecipes(parsedRecipes);
+      } else {
+        setSavedRecipes([]); // Fallback if parsed data isn't an array
       }
+    } catch (err) {
+      console.error('Error loading recipes from localStorage:', err);
+      setSavedRecipes([]); // Set to empty array on error
     }
-  }, []);
+  } else {
+    setSavedRecipes([]); // No saved recipes found
+  }
+}, []);
+
 
   const handleInputChange = (e: ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
@@ -77,7 +85,7 @@ const RecipeGenerator: React.FC = () => {
 
   const sendRecipesToEmail = async () => {
     try {
-      const response = await axios.post('https://instameals.onrender.com/send_recipes', {
+      const response = await axios.post('http://127.0.0.1:5000/send_recipes', {
         email,
         recipes: savedRecipes,
       });
@@ -113,7 +121,7 @@ const RecipeGenerator: React.FC = () => {
     };
 
     try {
-      const response = await axios.post<RecipeResponse>('https://instameals.onrender.com/generate_recipe', recipeRequest);
+      const response = await axios.post<RecipeResponse>('http://127.0.0.1:5000/generate_recipe', recipeRequest);
       setRecipe(response.data.recipe);
     } catch (err) {
       console.error('Error generating recipe:', err);
@@ -188,41 +196,69 @@ const RecipeGenerator: React.FC = () => {
           {error && <p className="error-message">{error}</p>}
 
           {recipe && (
-            <div className="recipe">
-              <h2>Recipe:</h2>
-              <pre>{recipe}</pre>
-              <button className="save-btn" onClick={handleSaveRecipe}>
-                Save Recipe
-              </button>
-            </div>
-          )}
+  <div className="recipe">
+    <h2>Recipe:</h2>
+    <div className="recipe-content">
+      {recipe.split('\n').map((line, index) => {
+        if (line.trim().startsWith('*')) {
+          return (
+            <li key={index}>
+              {line.trim().substring(1).trim()}
+            </li>
+          );
+        } else if (line.match(/^\d+\./)) {
+          return (
+            <p key={index} style={{ marginLeft: '20px' }}>
+              {line.trim()}
+            </p>
+          );
+        } else {
+          return <p key={index}>{line.trim()}</p>;
+        }
+      })}
+    </div>
+    <button className="save-btn" onClick={handleSaveRecipe}>
+      Save Recipe
+    </button>
+  </div>
+)}
+
         </div>
 
-        {/* Saved Recipes Section */}
         <div className="saved-recipes">
-          <h2>Saved Recipes</h2>
-          <ul>
-            {savedRecipes.map((savedRecipe, index) => (
-              <li key={index} className="saved-recipe-item">
-                <pre onClick={() => openModal(savedRecipe)}>{savedRecipe}</pre>
-                <button className="delete-btn" onClick={() => handleDeleteRecipe(index)} aria-label="Delete Recipe">
-                  🗑️
-                </button>
-              </li>
-            ))}
-          </ul>
-          <div className="email-section">
-          <h3>Send Saved Recipes to Your Email</h3>
-          <input
-            type="email"
-            placeholder="Enter your email"
-            value={email}
-            onChange={handleEmailChange}
-          />
-          <button onClick={sendRecipesToEmail}>Send Recipes</button>
-          {emailSent && <p>Email sent successfully!</p>}
-        </div>
-        </div>
+  <h2>Saved Recipes</h2>
+  {savedRecipes === null ? ( // Check if still initializing
+    <p className="message message-loading">Loading recipes...</p>
+  ) : savedRecipes.length === 0 ? ( // No recipes saved
+    <p className="message message-empty">No saved recipes</p>
+  ) : (
+    <ul>
+      {savedRecipes.map((savedRecipe, index) => (
+        <li key={index} className="saved-recipe-item">
+          <pre onClick={() => openModal(savedRecipe)}>{savedRecipe}</pre>
+          <button className="delete-btn" onClick={() => handleDeleteRecipe(index)} aria-label="Delete Recipe">
+            🗑️
+          </button>
+        </li>
+      ))}
+    </ul>
+  )}
+  <div className="email-section">
+    <h3>Send Saved Recipes to Your Email</h3>
+    <input
+      type="email"
+      placeholder="Enter your email"
+      value={email}
+      onChange={handleEmailChange}
+    />
+    <button onClick={sendRecipesToEmail}>Send Recipes</button>
+    {emailSent && <p>Email sent successfully!</p>}
+  </div>
+</div>
+
+
+
+
       </div>
 
       {/* Modal */}
