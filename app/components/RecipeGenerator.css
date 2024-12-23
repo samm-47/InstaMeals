@@ -289,3 +289,27 @@ input, select {
   font-size: 14px;    /* Match input and button text size */
   text-align: center; /* Center align text */
 }
+/* General styles for messages */
+.message {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-top: 20px;
+  padding: 10px;
+  border-radius: 5px;
+}
+
+/* Loading message */
+.message-loading {
+  background-color: #f9f9f9;
+  color: #455f78;
+  font-weight: bold;
+  border: 1px solid #cce5ff;
+}
+
+/* No saved recipes message */
+.message-empty {
+  background-color: #fefefe;
+  color: #6c757d;
+  font-style: italic;
+  border: 1px solid #ddd;
+}
